@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define SALIR 3
+typedef struct pokemon{
+    char Nombre[30];
+    int pokedex;
+    struct pokemon *next;
+}pokemon_t; 
+
+pokemon_t * nacional=NULL;
+void menu(void);
+void imprimir_pokemon(pokemon_t);
+void pedir_datos(pokemon_t * pokemon);
+void revisar_Pokemon(void);
+void subir_Pokemon(void);
+void liberar_memoria(void);
+
+int main(){
+    menu();
+    liberar_memoria();
+    return 0;
+}
+
+void imprimir_pokemon(pokemon_t pokemon){
+    printf("Pokemon: %s\n",pokemon.Nombre);
+    printf("N° Pokedex nacional: %d\n",pokemon.pokedex);
+    printf("---------0---------\n");
+
+}
+void pedir_datos(pokemon_t * pokemon){
+    printf("Nombre del Pokemon:\n");
+    scanf("%s",pokemon->Nombre);
+    printf("Numero de Pokedex nacional:\n");
+    scanf("%d",&(pokemon->pokedex));
+
+}
+
+void menu(void){
+    int opcion;
+    do{
+        printf("1_Subir Pokemon nuevo\n");
+        printf("2_Ver los Pokemon subidos\n");
+        printf("3_Apagar Pokedex\n");
+        scanf("%d",&opcion);
+        if(opcion==1)subir_Pokemon();
+        if(opcion==2)revisar_Pokemon();
+    }while(opcion!=SALIR);
+
+}
+
+void subir_Pokemon(){
+    pokemon_t *pokemon_aux;
+    pokemon_aux=malloc(sizeof(pokemon_t));
+    if(pokemon_aux==NULL){
+        printf("Imposible registrar\n");
+    }else{
+        pedir_datos(pokemon_aux);
+        pokemon_aux->next=nacional;
+        nacional=pokemon_aux;
+    }
+
+}
+
+void revisar_Pokemon(void){
+    pokemon_t *lista=nacional;
+    while(lista!=NULL){
+        imprimir_pokemon(*lista);
+        lista=lista->next;
+    }
+}
+void liberar_memoria(void){
+    pokemon_t *aux=NULL;
+    while(nacional!=NULL){
+        aux=nacional;
+        nacional=nacional->next;
+        free(aux);
+
+    }
+
+} 
